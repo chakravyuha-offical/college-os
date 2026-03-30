@@ -96,7 +96,7 @@ export default function SelectCollegePage() {
     }
 
     toast.success('College selected! Welcome aboard.');
-    router.push('/');
+    router.push('/home');
   };
 
   return (

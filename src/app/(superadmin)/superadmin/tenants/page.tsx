@@ -31,7 +31,7 @@ export default function SuperAdminTenantsPage() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <Link href="/" className="text-[0.65rem] font-bold text-[var(--primary)] hover:underline">
+          <Link href="/home" className="text-[0.65rem] font-bold text-[var(--primary)] hover:underline">
             ← Back to Dashboard
           </Link>
           <div className="w-9 h-9 rounded-full bg-[#EF4444] flex items-center justify-center border-2 border-[var(--comic-border)]">

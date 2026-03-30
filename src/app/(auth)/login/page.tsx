@@ -49,14 +49,14 @@ export default function LoginPage() {
           const redirectMap: Record<string, string> = {
             super_admin: '/superadmin/tenants',
             teacher: '/schedule',
-            principal: '/',
-            vice_principal: '/',
-            coordinator: '/',
-            hod: '/',
-            student: '/',
-            parent: '/',
+            principal: '/home',
+            vice_principal: '/home',
+            coordinator: '/home',
+            hod: '/home',
+            student: '/home',
+            parent: '/home',
           };
-          router.push(redirectMap[profile.role] || '/');
+          router.push(redirectMap[profile.role] || '/home');
         }
       } else {
         // No profile yet — send to college selection

@@ -64,7 +64,7 @@ export default function RegisterCollegePage() {
       }
 
       toast.success('College registered! Redirecting to dashboard...');
-      router.push('/');
+      router.push('/home');
     } else {
       // Email confirmation required — show success screen
       setSubmitted(true);

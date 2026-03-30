@@ -12,7 +12,7 @@ interface BottomNavItem {
 
 // Mobile bottom nav: Home, Schedule, Tasks, Files, Settings
 const BOTTOM_NAV_ITEMS: BottomNavItem[] = [
-  { title: 'Home', href: '/', icon: 'dashboard' },
+  { title: 'Home', href: '/home', icon: 'dashboard' },
   { title: 'Schedule', href: '/schedule', icon: 'calendar_month' },
   { title: 'Tasks', href: '/assignments', icon: 'assignment' },
   { title: 'Files', href: '/files', icon: 'folder_open' },
@@ -32,7 +32,7 @@ export default function BottomNavBar({ role }: BottomNavBarProps) {
     : BOTTOM_NAV_ITEMS;
 
   const isActive = (href: string) => {
-    if (href === '/') return pathname === '/';
+    if (href === '/home') return pathname === '/home';
     return pathname.startsWith(href);
   };
 

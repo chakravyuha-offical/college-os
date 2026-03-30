@@ -29,7 +29,7 @@ export const ROLE_COLORS: Record<UserRole, string> = {
 // Navigation Items (role-filtered)
 // ============================================
 export const DASHBOARD_NAV_ITEMS: NavItem[] = [
-  { title: 'Dashboard', href: '/', icon: 'dashboard', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
+  { title: 'Home', href: '/home', icon: 'dashboard', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
   { title: 'Schedule', href: '/schedule', icon: 'calendar_month', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
   { title: 'Attendance', href: '/attendance', icon: 'fact_check', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
   { title: 'Assignments', href: '/assignments', icon: 'assignment', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
@@ -61,13 +61,13 @@ export const SUPERADMIN_NAV_ITEMS: NavItem[] = [
 // ============================================
 export const ROLE_REDIRECT: Record<UserRole, string> = {
   super_admin: '/superadmin/tenants',
-  principal: '/',
-  vice_principal: '/',
-  coordinator: '/',
-  hod: '/',
+  principal: '/home',
+  vice_principal: '/home',
+  coordinator: '/home',
+  hod: '/home',
   teacher: '/schedule',
-  student: '/',
-  parent: '/',
+  student: '/home',
+  parent: '/home',
 };
 
 // ============================================
