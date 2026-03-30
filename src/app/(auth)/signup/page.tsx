@@ -2,163 +2,184 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import ComicButton from '@/components/ui/ComicButton';
-import ComicInput from '@/components/ui/ComicInput';
 import toast from 'react-hot-toast';
 
 export default function SignupPage() {
-  const [form, setForm] = useState({ fullName: '', email: '', password: '', confirmPassword: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const router = useRouter();
 
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (form.password !== form.confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-    if (form.password.length < 8) {
-      setError('Password must be at least 8 characters');
-      return;
-    }
+  const handleGoogleSignup = async () => {
     setLoading(true);
     setError('');
 
     const supabase = createClient();
-    const { data, error: authError } = await supabase.auth.signUp({
-      email: form.email,
-      password: form.password,
+    const { error: authError } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
       options: {
-        data: {
-          full_name: form.fullName,
+        redirectTo: `${window.location.origin}/auth/callback`,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
         },
-        emailRedirectTo: `${window.location.origin}/select-college`,
       },
     });
 
     if (authError) {
       setError(authError.message);
+      toast.error('Sign up failed. Please try again.');
       setLoading(false);
-      return;
     }
-
-    // If email confirmation is required, show a message
-    if (data.user && !data.session) {
-      toast.success('Check your email to confirm your account!');
-      setLoading(false);
-      return;
-    }
-
-    // If auto-confirmed, redirect to college selection
-    toast.success('Account created! Select your college.');
-    router.push('/select-college');
-    setLoading(false);
   };
 
   return (
-    <div className="min-h-screen flex bg-[var(--surface-bg)]">
-      {/* Left Panel */}
-      <div className="hidden lg:flex flex-col justify-between w-[45%] bg-[#0a0a1a] p-12 relative overflow-hidden">
+    <div className="min-h-screen flex bg-[var(--surface-bg)] relative overflow-hidden">
+      {/* Background FX */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-[-10%] left-[10%] w-[500px] h-[500px] bg-[#8B5CF6]/6 rounded-full blur-[140px]" />
+        <div className="absolute bottom-[-5%] right-[5%] w-[400px] h-[400px] bg-[#10B981]/5 rounded-full blur-[120px]" />
+        <div className="grid-pattern absolute inset-0" />
+      </div>
+
+      {/* Left Panel (desktop) */}
+      <div className="hidden lg:flex flex-col justify-between w-[48%] p-14 relative z-10">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-20 right-10 w-[300px] h-[300px] bg-[#8B5CF6]/10 rounded-full blur-[100px]" />
-          <div className="absolute bottom-20 left-10 w-[250px] h-[250px] bg-[#10B981]/8 rounded-full blur-[80px]" />
+          <div className="absolute top-20 right-10 w-[350px] h-[350px] bg-[#8B5CF6]/8 rounded-full blur-[120px]" />
+          <div className="absolute bottom-20 left-10 w-[280px] h-[280px] bg-[#10B981]/6 rounded-full blur-[100px]" />
         </div>
 
         <div className="relative z-10 flex items-center gap-3">
-          <div className="w-12 h-12 rounded-[14px] bg-[#6366F1] flex items-center justify-center border-2 border-white/20" style={{ boxShadow: '0 0 30px rgba(99,102,241,0.4)' }}>
+          <div
+            className="w-12 h-12 rounded-[14px] bg-gradient-to-br from-[#6366F1] to-[#8B5CF6] flex items-center justify-center"
+            style={{ boxShadow: '0 0 30px rgba(99,102,241,0.3)' }}
+          >
             <span className="material-symbols-outlined text-white text-[26px]">school</span>
           </div>
-          <span className="text-xl font-extrabold tracking-tight text-white" style={{ fontFamily: 'var(--font-heading)' }}>College OS</span>
+          <Link href="/" className="text-xl font-extrabold tracking-tight text-white" style={{ fontFamily: 'var(--font-heading)' }}>
+            College OS
+          </Link>
         </div>
 
-        <div className="relative z-10 space-y-4">
-          <h2 className="text-5xl font-black text-white leading-tight" style={{ fontFamily: 'var(--font-heading)' }}>
+        <div className="relative z-10 space-y-5">
+          <h2 className="text-5xl font-black text-white leading-[1.1]" style={{ fontFamily: 'var(--font-heading)' }}>
             Join Your<br />
-            <span className="bg-gradient-to-r from-[#10B981] to-[#6366F1] bg-clip-text text-transparent">Campus.</span>
+            <span className="gradient-text">Campus.</span>
           </h2>
-          <p className="text-white/40 max-w-md leading-relaxed">
+          <p className="text-[var(--text-secondary)] max-w-md leading-relaxed text-[0.95rem]">
             Create your account and get connected to your college. Access timetables, assignments, attendance, and everything in one place.
           </p>
+
+          <div className="flex items-center gap-6 pt-2">
+            {[
+              { icon: 'bolt', text: 'Instant Setup' },
+              { icon: 'shield', text: 'Free for Students' },
+            ].map((badge) => (
+              <div key={badge.text} className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-[16px] text-[#10B981]">{badge.icon}</span>
+                <span className="text-[0.65rem] font-bold uppercase tracking-[0.1em] text-[var(--text-muted)]">
+                  {badge.text}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="relative z-10">
-          <p className="text-[0.65rem] font-bold uppercase tracking-[0.15em] text-white/20">
-            Free for Students
+          <p className="text-[0.62rem] font-bold uppercase tracking-[0.15em] text-[var(--text-muted)]/60">
+            © 2026 College OS
           </p>
         </div>
       </div>
 
       {/* Right Panel */}
-      <div className="flex-1 flex flex-col items-center justify-center p-6 lg:p-12">
-        <div className="lg:hidden flex items-center gap-3 mb-10">
-          <div className="w-11 h-11 rounded-[14px] bg-[var(--primary)] flex items-center justify-center comic-shadow border-3 border-[var(--comic-border)]">
-            <span className="material-symbols-outlined text-white text-[24px]">school</span>
+      <div className="flex-1 flex flex-col items-center justify-center p-6 lg:p-16 relative z-10">
+        <div className="w-full max-w-[420px]">
+          {/* Mobile Logo */}
+          <div className="lg:hidden flex items-center gap-3 mb-12 justify-center">
+            <div
+              className="w-11 h-11 rounded-[14px] bg-gradient-to-br from-[#6366F1] to-[#8B5CF6] flex items-center justify-center"
+              style={{ boxShadow: '0 0 24px rgba(99,102,241,0.3)' }}
+            >
+              <span className="material-symbols-outlined text-white text-[22px]">school</span>
+            </div>
+            <Link href="/" className="text-lg font-extrabold tracking-tight" style={{ fontFamily: 'var(--font-heading)' }}>
+              College OS
+            </Link>
           </div>
-          <span className="text-lg font-extrabold tracking-tight" style={{ fontFamily: 'var(--font-heading)' }}>College OS</span>
-        </div>
 
-        <div className="w-full max-w-[420px] space-y-7">
-          <div className="space-y-2">
-            <h1 className="text-3xl font-black" style={{ fontFamily: 'var(--font-heading)' }}>Create Account</h1>
-            <p className="text-[var(--text-secondary)] text-sm">Sign up to get started with your college</p>
+          {/* Card */}
+          <div className="glass-card p-8 lg:p-10 animate-slide-up">
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-gradient-to-br from-[#10B981]/20 to-[#6366F1]/10 flex items-center justify-center border border-[#10B981]/20">
+                <span className="material-symbols-outlined text-[28px] text-[#10B981]">person_add</span>
+              </div>
+              <h1 className="text-2xl font-black mb-2" style={{ fontFamily: 'var(--font-heading)' }}>
+                Create Account
+              </h1>
+              <p className="text-[var(--text-secondary)] text-sm">
+                Sign up to get started with your college
+              </p>
+            </div>
+
+            {error && (
+              <div className="p-3 rounded-[12px] bg-[var(--danger)]/10 border border-[var(--danger)]/20 text-[var(--danger)] text-[0.75rem] font-bold mb-6 text-center">
+                {error}
+              </div>
+            )}
+
+            {/* Google Sign Up */}
+            <button
+              onClick={handleGoogleSignup}
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-[16px] bg-white text-[#1a1a2e] font-bold text-[0.85rem] tracking-wide hover:bg-gray-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
+              style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.1)' }}
+            >
+              {loading ? (
+                <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>
+              ) : (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+              )}
+              {loading ? 'Creating account...' : 'Continue with Google'}
+            </button>
+
+            {/* Divider */}
+            <div className="flex items-center gap-3 my-6">
+              <div className="flex-1 h-px bg-white/8" />
+              <span className="text-[0.6rem] font-bold uppercase tracking-wider text-[var(--text-muted)]">how it works</span>
+              <div className="flex-1 h-px bg-white/8" />
+            </div>
+
+            {/* Steps */}
+            <div className="space-y-3">
+              {[
+                { step: '1', text: 'Sign up with Google', icon: 'login' },
+                { step: '2', text: 'Select your college', icon: 'apartment' },
+                { step: '3', text: 'Start learning', icon: 'rocket_launch' },
+              ].map((item) => (
+                <div key={item.step} className="flex items-center gap-3">
+                  <div className="w-7 h-7 rounded-full bg-[var(--primary)]/15 flex items-center justify-center shrink-0">
+                    <span className="text-[0.6rem] font-extrabold text-[var(--primary)]">{item.step}</span>
+                  </div>
+                  <span className="text-[0.75rem] text-[var(--text-secondary)] font-medium">{item.text}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {error && (
-            <div className="p-3 rounded-[12px] bg-red-50 border-2 border-red-200 text-red-700 text-[0.75rem] font-bold">{error}</div>
-          )}
-
-          <form onSubmit={handleSignup} className="space-y-4">
-            <ComicInput
-              label="Full Name"
-              icon="person"
-              placeholder="e.g. Aditya Gothe"
-              value={form.fullName}
-              onChange={(e) => setForm({ ...form, fullName: e.target.value })}
-              required
-            />
-            <ComicInput
-              label="Email"
-              icon="mail"
-              type="email"
-              placeholder="you@college.edu"
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              required
-            />
-            <ComicInput
-              label="Password"
-              icon="lock"
-              type="password"
-              placeholder="Min 8 characters"
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              required
-            />
-            <ComicInput
-              label="Confirm Password"
-              icon="lock"
-              type="password"
-              placeholder="Re-enter your password"
-              value={form.confirmPassword}
-              onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
-              required
-            />
-
-            <ComicButton type="submit" size="lg" loading={loading} className="w-full">
-              Create Account
-              {!loading && <span className="material-symbols-outlined text-[18px]">arrow_forward</span>}
-            </ComicButton>
-          </form>
-
-          <p className="text-center text-sm text-[var(--text-secondary)]">
+          {/* Signin link */}
+          <p className="text-center text-sm text-[var(--text-secondary)] mt-6">
             Already have an account?{' '}
-            <Link href="/login" className="font-bold text-[var(--primary)] hover:underline">Sign in</Link>
+            <Link href="/login" className="font-bold text-[var(--primary)] hover:text-[var(--primary-light)] transition-colors">
+              Sign in
+            </Link>
           </p>
 
-          <p className="text-center text-[0.6rem] text-[var(--text-muted)]">
+          <p className="text-center text-[0.58rem] text-[var(--text-muted)] mt-4">
             By signing up, you agree to our Terms of Service and Privacy Policy.
           </p>
         </div>

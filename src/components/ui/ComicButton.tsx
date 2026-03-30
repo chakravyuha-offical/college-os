@@ -11,14 +11,14 @@ interface ComicButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const ComicButton = forwardRef<HTMLButtonElement, ComicButtonProps>(
   ({ children, variant = 'primary', size = 'md', loading, className = '', disabled, ...props }, ref) => {
     const baseStyles =
-      'inline-flex items-center justify-center gap-2 font-bold uppercase tracking-wide transition-all active-press comic-shadow-sm';
+      'inline-flex items-center justify-center gap-2 font-bold uppercase tracking-wide transition-all duration-200';
 
     const variantStyles: Record<string, string> = {
-      primary: 'bg-[var(--primary)] text-white border-3 border-[var(--comic-border)] hover:bg-[var(--primary-dark)]',
-      secondary: 'bg-[var(--secondary)] text-white border-3 border-[var(--comic-border)] hover:brightness-110',
-      outline: 'bg-white text-[var(--text-primary)] border-3 border-[var(--comic-border)] hover:bg-gray-50',
-      ghost: 'bg-transparent text-[var(--text-secondary)] hover:bg-gray-100 shadow-none',
-      danger: 'bg-[var(--danger)] text-white border-3 border-[var(--comic-border)] hover:brightness-110',
+      primary: 'bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-white border border-white/10 hover:brightness-110 shadow-[0_4px_20px_rgba(99,102,241,0.25)]',
+      secondary: 'bg-[var(--secondary)] text-white border border-white/10 hover:brightness-110 shadow-[0_4px_20px_rgba(139,92,246,0.25)]',
+      outline: 'bg-transparent text-[var(--text-primary)] border border-white/10 hover:bg-white/5 hover:border-white/20',
+      ghost: 'bg-transparent text-[var(--text-secondary)] hover:bg-white/5 hover:text-white',
+      danger: 'bg-[var(--danger)] text-white border border-white/10 hover:brightness-110',
     };
 
     const sizeStyles: Record<string, string> = {

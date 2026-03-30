@@ -19,13 +19,13 @@ const ComicInput = forwardRef<HTMLInputElement, ComicInputProps>(
         )}
         <div className="relative">
           {icon && (
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)] text-[20px]">
+            <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)] text-[20px]">
               {icon}
             </span>
           )}
           <input
             ref={ref}
-            className={`w-full bg-white border-3 border-[var(--comic-border)] rounded-[14px] px-4 py-3 text-sm font-medium text-[var(--text-primary)] placeholder:text-[var(--text-muted)] placeholder:font-medium focus:outline-none focus:ring-3 focus:ring-[var(--primary)]/20 focus:border-[var(--primary)] transition-all ${icon ? 'pl-10' : ''} ${error ? 'border-[var(--danger)] focus:ring-[var(--danger)]/20' : ''} ${className}`}
+            className={`w-full bg-[var(--surface-elevated)] border border-[var(--surface-border)] rounded-[14px] px-4 py-3 text-sm font-medium text-[var(--text-primary)] placeholder:text-[var(--text-muted)] placeholder:font-medium focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/30 focus:border-[var(--primary)]/50 transition-all ${icon ? 'pl-11' : ''} ${error ? 'border-[var(--danger)]/50 focus:ring-[var(--danger)]/20' : ''} ${className}`}
             {...props}
           />
         </div>

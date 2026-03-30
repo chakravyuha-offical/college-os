@@ -49,7 +49,8 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith('/login') ||
     pathname.startsWith('/signup') ||
     pathname.startsWith('/select-college') ||
-    pathname.startsWith('/register-college');
+    pathname.startsWith('/register-college') ||
+    pathname.startsWith('/auth/callback');
 
   // If user is not authenticated and trying to access protected route
   if (!user && !isPublicRoute) {

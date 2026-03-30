@@ -44,13 +44,15 @@ export default function RootLayout({
           toastOptions={{
             duration: 3000,
             style: {
-              background: '#1e1e2e',
-              color: '#cdd6f4',
-              border: '2px solid #313244',
-              borderRadius: '16px',
+              background: 'rgba(13, 13, 32, 0.85)',
+              backdropFilter: 'blur(16px)',
+              color: '#e8e8f0',
+              border: '1px solid rgba(255,255,255,0.08)',
+              borderRadius: '14px',
               fontFamily: 'var(--font-body)',
               fontWeight: 600,
-              fontSize: '0.85rem',
+              fontSize: '0.82rem',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
             },
           }}
         />
