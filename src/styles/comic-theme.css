@@ -1,42 +1,57 @@
 /* ============================================
-   College OS — Comic Theme CSS
-   Step 0.6: Design System & Comic Theme
+   College OS — Premium Dark UI Theme (Replaces Comic Theme)
    ============================================ */
 
-/* --- Comic Shadows --- */
+/* --- Glass Cards (Replacing Comic Cards) --- */
+.comic-card {
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.comic-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255,255,255,0.03);
+}
+
+/* --- Dark Shadows (Replacing Hard Black Comic Shadows) --- */
 .comic-shadow {
-  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .comic-shadow-lg {
-  box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
 .comic-shadow-sm {
-  box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .comic-shadow-colored {
-  box-shadow: 4px 4px 0px 0px var(--shadow-color, rgba(0, 0, 0, 0.9));
+  box-shadow: 0 4px 16px var(--shadow-color, rgba(0, 0, 0, 0.4));
 }
 
-/* --- Comic Border --- */
+/* --- Dark Borders (Replacing Thick Borders) --- */
 .comic-border {
-  border: 3px solid #1a1a2e;
-  border-radius: 16px;
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
 }
 
 .comic-border-sm {
-  border: 2px solid #1a1a2e;
-  border-radius: 12px;
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-sm);
 }
 
 .comic-border-thick {
-  border: 4px solid #1a1a2e;
-  border-radius: 20px;
+  border: 2px solid var(--surface-border);
+  border-radius: var(--radius-lg);
 }
 
-/* --- Halftone Pattern Overlay --- */
+/* --- Halftone overlay turned into a subtle mesh/noise --- */
 .halftone {
   position: relative;
   overflow: hidden;
@@ -46,29 +61,27 @@
   content: '';
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
-  background-size: 4px 4px;
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 24px 24px;
   pointer-events: none;
   z-index: 1;
 }
 
-/* --- Burst Badge (like a starburst) --- */
+/* --- Burst Badge --- */
 .burst-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 4px 14px;
   font-weight: 800;
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  border-radius: 4px;
-  transform: skewX(-6deg);
-  border: 2px solid currentColor;
-}
-
-.burst-badge > span {
-  transform: skewX(6deg);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* --- Bouncy Transition --- */
@@ -76,21 +89,22 @@
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* --- Active Press (for buttons/cards) --- */
+/* --- Active Press --- */
 .active-press {
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
 .active-press:active {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.9);
+  transform: scale(0.96);
+  opacity: 0.8;
 }
 
 /* --- Stat Card --- */
 .stat-card {
   position: relative;
-  border-radius: 20px;
-  border: 3px solid #1a1a2e;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--surface-border);
+  background: linear-gradient(145deg, var(--surface-card), rgba(20,20,40,0.5));
   padding: 1.25rem;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -98,7 +112,8 @@
 
 .stat-card:hover {
   transform: translateY(-4px);
-  box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
 }
 
 /* --- Subject Badge --- */
@@ -109,10 +124,11 @@
   padding: 4px 12px;
   border-radius: 100px;
   font-weight: 700;
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  border: 2px solid currentColor;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
 }
 
 /* --- Now! Indicator --- */
@@ -120,38 +136,39 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 2px 10px;
-  background: #FFD700;
-  color: #1a1a2e;
-  font-weight: 900;
-  font-size: 0.65rem;
+  padding: 3px 10px;
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--warning);
+  font-weight: 800;
+  font-size: 0.6rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   border-radius: 6px;
-  transform: rotate(-3deg);
-  border: 2px solid #1a1a2e;
-  animation: pulse-now 2s infinite;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  animation: pulse-glow 2s infinite;
 }
 
-@keyframes pulse-now {
-  0%, 100% { transform: rotate(-3deg) scale(1); }
-  50% { transform: rotate(-3deg) scale(1.05); }
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 rgba(245, 158, 11, 0); }
+  50% { box-shadow: 0 0 12px rgba(245, 158, 11, 0.4); }
 }
 
 /* --- Session Card (Timetable) --- */
 .session-card {
   position: relative;
-  border-left: 5px solid var(--session-color, #6366F1);
-  border-radius: 16px;
+  border-radius: var(--radius-md);
   padding: 1rem 1.25rem;
-  background: white;
-  border: 3px solid #1a1a2e;
-  border-left: 5px solid var(--session-color, #6366F1);
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-left: 4px solid var(--session-color, #6366F1);
   transition: all 0.2s ease;
 }
 
 .session-card:hover {
   transform: translateX(4px);
+  background: var(--surface-hover);
+  border-color: rgba(255,255,255,0.08);
+  border-left-color: var(--session-color, #6366F1);
 }
 
 /* --- Lunch Separator --- */
@@ -159,59 +176,26 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 0;
+  padding: 12px 0;
 }
 
 .lunch-separator::before,
 .lunch-separator::after {
   content: '';
   flex: 1;
-  border-top: 3px dashed #e2e8f0;
+  border-top: 1px dashed var(--surface-border);
 }
 
-/* --- Comic Card Base --- */
-.comic-card {
-  background: white;
-  border: 3px solid #1a1a2e;
-  border-radius: 20px;
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.comic-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
-}
-
-/* --- Assignment Status Badges --- */
-.status-overdue { --shadow-color: #EF4444; border-color: #EF4444; color: #B91C1C; background: #FEF2F2; }
-.status-pending { --shadow-color: #8B5CF6; border-color: #8B5CF6; color: #6D28D9; background: #F5F3FF; }
-.status-graded { --shadow-color: #10B981; border-color: #10B981; color: #047857; background: #F0FDF4; }
-.status-submitted { --shadow-color: #3B82F6; border-color: #3B82F6; color: #1D4ED8; background: #EFF6FF; }
+/* --- Assignment Status Badges (Dark Mode Adjustments) --- */
+.status-overdue { --shadow-color: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.3); color: #FCA5A5; background: rgba(239, 68, 68, 0.1); }
+.status-pending { --shadow-color: rgba(139, 92, 246, 0.2); border-color: rgba(139, 92, 246, 0.3); color: #C4B5FD; background: rgba(139, 92, 246, 0.1); }
+.status-graded { --shadow-color: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.3); color: #6EE7B7; background: rgba(16, 185, 129, 0.1); }
+.status-submitted { --shadow-color: rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.3); color: #93C5FD; background: rgba(59, 130, 246, 0.1); }
 
 /* --- Priority Indicators --- */
-.priority-high { border-left-color: #EF4444; }
-.priority-medium { border-left-color: #F59E0B; }
-.priority-low { border-left-color: #10B981; }
-
-/* --- Dark Mode Overrides --- */
-.dark .comic-card {
-  background: #1e1e2e;
-  border-color: #313244;
-}
-
-.dark .comic-shadow {
-  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.5);
-}
-
-.dark .comic-border {
-  border-color: #313244;
-}
-
-.dark .session-card {
-  background: #1e1e2e;
-  border-color: #313244;
-}
+.priority-high { border-left-color: var(--danger); }
+.priority-medium { border-left-color: var(--warning); }
+.priority-low { border-left-color: var(--success); }
 
 /* --- Mobile Bottom Nav --- */
 .bottom-nav {
@@ -220,92 +204,38 @@
   left: 0;
   right: 0;
   z-index: 50;
-  background: white;
-  border-top: 3px solid #1a1a2e;
+  background: rgba(13, 13, 32, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 6px 0 env(safe-area-inset-bottom, 8px);
+  padding: 8px 0 env(safe-area-inset-bottom, 12px);
 }
 
 .bottom-nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: 4px 12px;
+  gap: 4px;
+  padding: 8px 16px;
   border-radius: 12px;
-  font-size: 0.6rem;
+  font-size: 0.65rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #94a3b8;
+  color: var(--text-muted);
   transition: all 0.2s ease;
 }
 
 .bottom-nav-item.active {
-  color: #6366F1;
-  background: #EEF2FF;
+  color: #fff;
 }
 
-.dark .bottom-nav {
-  background: #1e1e2e;
-  border-color: #313244;
+.bottom-nav-item.active .material-symbols-outlined {
+  color: var(--primary-light);
+  text-shadow: 0 0 12px rgba(99, 102, 241, 0.6);
 }
 
-/* --- Scrollbar Customization --- */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 100px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
-/* --- Animation Utilities --- */
-@keyframes slide-up {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slide-in-right {
-  from { opacity: 0; transform: translateX(16px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes pop-in {
-  0% { opacity: 0; transform: scale(0.9); }
-  70% { transform: scale(1.02); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-.animate-slide-up {
-  animation: slide-up 0.4s ease-out forwards;
-}
-
-.animate-slide-in-right {
-  animation: slide-in-right 0.4s ease-out forwards;
-}
-
-.animate-fade-in {
-  animation: fade-in 0.3s ease-out forwards;
-}
-
-.animate-pop-in {
-  animation: pop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
+/* Drop the explicit .dark overrides as the whole theme is now dark */
