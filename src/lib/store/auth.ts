@@ -24,6 +24,7 @@ interface AuthState {
   setUser: (user: UserProfile | null) => void;
   setLoading: (loading: boolean) => void;
   logout: () => void;
+  initializeAuth: (supabase: any) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -46,8 +47,59 @@ export const useAuthStore = create<AuthState>((set) => ({
       isAuthenticated: false,
       isLoading: false,
     }),
-}));
+    
+  initializeAuth: async (supabase) => {
+    set({ isLoading: true });
 
+    // 1. Initial Check
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      set({ user: null, isAuthenticated: false, isLoading: false });
+    }
+
+    // 2. Map Profile Function
+    const fetchProfile = async (userId: string) => {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select(`id, role, full_name, email, avatar_url, college_id, department_id, preferences`)
+        .eq('auth_user_id', userId)
+        .single();
+      
+      if (!error && data) {
+        set({
+          user: {
+            id: data.id,
+            userId,
+            fullName: data.full_name,
+            email: data.email,
+            role: data.role as any,
+            avatarUrl: data.avatar_url,
+            collegeId: data.college_id,
+            departmentId: data.department_id,
+            bio: data.preferences?.bio || null,
+            profileVisibility: 'PUBLIC',
+            classId: null, // Hydrate via class_enrollments later if needed
+          },
+          isAuthenticated: true,
+          isLoading: false
+        });
+      } else {
+        set({ user: null, isAuthenticated: false, isLoading: false });
+      }
+    };
+
+    if (session) await fetchProfile(session.user.id);
+
+    // 3. Listener
+    supabase.auth.onAuthStateChange(async (event: any, session: any) => {
+      if (session) {
+        await fetchProfile(session.user.id);
+      } else {
+        set({ user: null, isAuthenticated: false, isLoading: false });
+      }
+    });
+  }
+}));
 // Mock user for development (before Supabase is connected)
 export const MOCK_STUDENT: UserProfile = {
   id: 'mock-profile-1',

@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from '@/components/layout/Sidebar';
 import TopAppBar from '@/components/layout/TopAppBar';
 import BottomNavBar from '@/components/layout/BottomNavBar';
 import { DASHBOARD_NAV_ITEMS, ADMIN_NAV_ITEMS } from '@/lib/constants';
-import { type UserRole } from '@/types';
+import { useAuthStore } from '@/lib/store/auth';
+import { createClient } from '@/lib/supabase/client';
 
 export default function DashboardLayout({
   children,
@@ -13,9 +14,15 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { user, initializeAuth } = useAuthStore();
 
-  // TODO: Replace with real auth — for now, mock as student
-  const role: UserRole = 'student';
+  useEffect(() => {
+    const supabase = createClient();
+    initializeAuth(supabase);
+  }, [initializeAuth]);
+
+  // Fallback role for dev if not tracked yet
+  const role = user?.role || 'student';
 
   return (
     <div className="flex min-h-screen w-full bg-[var(--surface-bg)]">
