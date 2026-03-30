@@ -29,25 +29,25 @@ export const ROLE_COLORS: Record<UserRole, string> = {
 // Navigation Items (role-filtered)
 // ============================================
 export const DASHBOARD_NAV_ITEMS: NavItem[] = [
-  { title: 'Dashboard', href: '/dashboard', icon: 'dashboard', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
-  { title: 'Schedule', href: '/dashboard/schedule', icon: 'calendar_month', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
-  { title: 'Attendance', href: '/dashboard/attendance', icon: 'fact_check', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
-  { title: 'Assignments', href: '/dashboard/assignments', icon: 'assignment', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
-  { title: 'Exams', href: '/dashboard/exams', icon: 'quiz', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
-  { title: 'Files', href: '/dashboard/files', icon: 'folder_open', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student'] },
-  { title: 'Notices', href: '/dashboard/notices', icon: 'campaign', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
-  { title: 'Analytics', href: '/dashboard/analytics', icon: 'analytics', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
-  { title: 'Classes', href: '/dashboard/classes', icon: 'groups', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher'] },
-  { title: 'Messages', href: '/dashboard/messages', icon: 'chat', roles: ['student', 'parent', 'teacher'] },
-  { title: 'Parents', href: '/dashboard/parents', icon: 'family_restroom', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher'] },
-  { title: 'Settings', href: '/dashboard/settings', icon: 'settings', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
+  { title: 'Dashboard', href: '/', icon: 'dashboard', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
+  { title: 'Schedule', href: '/schedule', icon: 'calendar_month', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
+  { title: 'Attendance', href: '/attendance', icon: 'fact_check', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
+  { title: 'Assignments', href: '/assignments', icon: 'assignment', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
+  { title: 'Exams', href: '/exams', icon: 'quiz', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
+  { title: 'Files', href: '/files', icon: 'folder_open', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student'] },
+  { title: 'Notices', href: '/notices', icon: 'campaign', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
+  { title: 'Analytics', href: '/analytics', icon: 'analytics', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
+  { title: 'Classes', href: '/classes', icon: 'groups', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher'] },
+  { title: 'Messages', href: '/messages', icon: 'chat', roles: ['student', 'parent', 'teacher'] },
+  { title: 'Parents', href: '/parents', icon: 'family_restroom', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher'] },
+  { title: 'Settings', href: '/settings', icon: 'settings', roles: ['principal', 'vice_principal', 'coordinator', 'hod', 'teacher', 'student', 'parent'] },
 ];
 
 export const ADMIN_NAV_ITEMS: NavItem[] = [
-  { title: 'Branches', href: '/dashboard/admin/branches', icon: 'account_tree', roles: ['principal', 'vice_principal', 'coordinator'] },
-  { title: 'Semesters', href: '/dashboard/admin/semesters', icon: 'date_range', roles: ['principal', 'vice_principal', 'coordinator'] },
-  { title: 'Subjects', href: '/dashboard/admin/subjects', icon: 'menu_book', roles: ['principal', 'vice_principal', 'coordinator', 'hod'] },
-  { title: 'Timetable Mgmt', href: '/dashboard/admin/timetable', icon: 'edit_calendar', roles: ['principal', 'vice_principal', 'coordinator', 'hod'] },
+  { title: 'Branches', href: '/admin/branches', icon: 'account_tree', roles: ['principal', 'vice_principal', 'coordinator'] },
+  { title: 'Semesters', href: '/admin/semesters', icon: 'date_range', roles: ['principal', 'vice_principal', 'coordinator'] },
+  { title: 'Subjects', href: '/admin/subjects', icon: 'menu_book', roles: ['principal', 'vice_principal', 'coordinator', 'hod'] },
+  { title: 'Timetable Mgmt', href: '/admin/timetable', icon: 'edit_calendar', roles: ['principal', 'vice_principal', 'coordinator', 'hod'] },
 ];
 
 export const SUPERADMIN_NAV_ITEMS: NavItem[] = [
@@ -61,13 +61,13 @@ export const SUPERADMIN_NAV_ITEMS: NavItem[] = [
 // ============================================
 export const ROLE_REDIRECT: Record<UserRole, string> = {
   super_admin: '/superadmin/tenants',
-  principal: '/dashboard',
-  vice_principal: '/dashboard',
-  coordinator: '/dashboard',
-  hod: '/dashboard',
-  teacher: '/dashboard/schedule',
-  student: '/dashboard',
-  parent: '/dashboard',
+  principal: '/',
+  vice_principal: '/',
+  coordinator: '/',
+  hod: '/',
+  teacher: '/schedule',
+  student: '/',
+  parent: '/',
 };
 
 // ============================================

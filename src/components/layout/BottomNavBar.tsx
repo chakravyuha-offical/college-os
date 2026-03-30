@@ -12,11 +12,11 @@ interface BottomNavItem {
 
 // Mobile bottom nav: Home, Schedule, Tasks, Files, Settings
 const BOTTOM_NAV_ITEMS: BottomNavItem[] = [
-  { title: 'Home', href: '/dashboard', icon: 'dashboard' },
-  { title: 'Schedule', href: '/dashboard/schedule', icon: 'calendar_month' },
-  { title: 'Tasks', href: '/dashboard/assignments', icon: 'assignment' },
-  { title: 'Files', href: '/dashboard/files', icon: 'folder_open' },
-  { title: 'Settings', href: '/dashboard/settings', icon: 'settings' },
+  { title: 'Home', href: '/', icon: 'dashboard' },
+  { title: 'Schedule', href: '/schedule', icon: 'calendar_month' },
+  { title: 'Tasks', href: '/assignments', icon: 'assignment' },
+  { title: 'Files', href: '/files', icon: 'folder_open' },
+  { title: 'Settings', href: '/settings', icon: 'settings' },
 ];
 
 interface BottomNavBarProps {
@@ -28,11 +28,11 @@ export default function BottomNavBar({ role }: BottomNavBarProps) {
 
   // Parents don't see Files
   const items = role === 'parent'
-    ? BOTTOM_NAV_ITEMS.filter(i => i.href !== '/dashboard/files')
+    ? BOTTOM_NAV_ITEMS.filter(i => i.href !== '/files')
     : BOTTOM_NAV_ITEMS;
 
   const isActive = (href: string) => {
-    if (href === '/dashboard') return pathname === '/dashboard';
+    if (href === '/') return pathname === '/';
     return pathname.startsWith(href);
   };
 

@@ -19,7 +19,7 @@ export default function Sidebar({ navItems, adminItems, role, onClose, collegeNa
   const filteredAdminItems = adminItems?.filter(item => item.roles.includes(role)) || [];
 
   const isActive = (href: string) => {
-    if (href === '/dashboard') return pathname === '/dashboard';
+    if (href === '/') return pathname === '/';
     return pathname.startsWith(href);
   };
 
