@@ -2,26 +2,94 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
 import ComicButton from '@/components/ui/ComicButton';
 import ComicInput from '@/components/ui/ComicInput';
+import toast from 'react-hot-toast';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [magicLinkLoading, setMagicLinkLoading] = useState(false);
   const [error, setError] = useState('');
+  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    // TODO: Replace with real Supabase auth
-    // For now, simulate login
-    await new Promise(r => setTimeout(r, 1000));
+    const supabase = createClient();
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-    // Mock: redirect to dashboard
-    window.location.href = '/dashboard';
+    if (authError) {
+      setError(authError.message);
+      setLoading(false);
+      return;
+    }
+
+    // Fetch profile to determine role-based redirect
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role, college_id')
+        .eq('auth_user_id', user.id)
+        .single();
+
+      if (profile) {
+        if (!profile.college_id) {
+          router.push('/select-college');
+        } else {
+          const redirectMap: Record<string, string> = {
+            super_admin: '/superadmin/tenants',
+            teacher: '/schedule',
+            principal: '/',
+            vice_principal: '/',
+            coordinator: '/',
+            hod: '/',
+            student: '/',
+            parent: '/',
+          };
+          router.push(redirectMap[profile.role] || '/');
+        }
+      } else {
+        // No profile yet — send to college selection
+        router.push('/select-college');
+      }
+    }
+
+    toast.success('Welcome back!');
+    setLoading(false);
+  };
+
+  const handleMagicLink = async () => {
+    if (!email) {
+      setError('Enter your email first to receive a magic link.');
+      return;
+    }
+    setMagicLinkLoading(true);
+    setError('');
+
+    const supabase = createClient();
+    const { error: magicError } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/`,
+      },
+    });
+
+    if (magicError) {
+      setError(magicError.message);
+    } else {
+      toast.success('Magic link sent! Check your email.');
+    }
+    setMagicLinkLoading(false);
   };
 
   return (
@@ -146,7 +214,13 @@ export default function LoginPage() {
           </div>
 
           {/* Magic Link */}
-          <ComicButton variant="outline" size="lg" className="w-full">
+          <ComicButton
+            variant="outline"
+            size="lg"
+            className="w-full"
+            loading={magicLinkLoading}
+            onClick={handleMagicLink}
+          >
             <span className="material-symbols-outlined text-[18px]">magic_button</span>
             Sign in with Magic Link
           </ComicButton>

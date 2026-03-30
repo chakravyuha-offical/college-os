@@ -2,13 +2,17 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
 import ComicButton from '@/components/ui/ComicButton';
 import ComicInput from '@/components/ui/ComicInput';
+import toast from 'react-hot-toast';
 
 export default function SignupPage() {
   const [form, setForm] = useState({ fullName: '', email: '', password: '', confirmPassword: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const router = useRouter();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,9 +26,36 @@ export default function SignupPage() {
     }
     setLoading(true);
     setError('');
-    // TODO: Replace with real Supabase auth signup
-    await new Promise(r => setTimeout(r, 1000));
-    window.location.href = '/select-college';
+
+    const supabase = createClient();
+    const { data, error: authError } = await supabase.auth.signUp({
+      email: form.email,
+      password: form.password,
+      options: {
+        data: {
+          full_name: form.fullName,
+        },
+        emailRedirectTo: `${window.location.origin}/select-college`,
+      },
+    });
+
+    if (authError) {
+      setError(authError.message);
+      setLoading(false);
+      return;
+    }
+
+    // If email confirmation is required, show a message
+    if (data.user && !data.session) {
+      toast.success('Check your email to confirm your account!');
+      setLoading(false);
+      return;
+    }
+
+    // If auto-confirmed, redirect to college selection
+    toast.success('Account created! Select your college.');
+    router.push('/select-college');
+    setLoading(false);
   };
 
   return (

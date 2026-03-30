@@ -2,8 +2,11 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
 import ComicButton from '@/components/ui/ComicButton';
 import ComicInput from '@/components/ui/ComicInput';
+import toast from 'react-hot-toast';
 
 export default function RegisterCollegePage() {
   const [form, setForm] = useState({
@@ -11,17 +14,62 @@ export default function RegisterCollegePage() {
     address: '',
     principalName: '',
     principalEmail: '',
+    principalPassword: '',
     phone: '',
   });
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // TODO: Create college via Supabase + send invite to principal
-    await new Promise(r => setTimeout(r, 1500));
-    setSubmitted(true);
+    setError('');
+
+    const supabase = createClient();
+
+    // Step 1: Sign up the principal account
+    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+      email: form.principalEmail,
+      password: form.principalPassword,
+      options: {
+        data: {
+          full_name: form.principalName,
+          role: 'principal',
+        },
+        emailRedirectTo: `${window.location.origin}/login`,
+      },
+    });
+
+    if (signUpError) {
+      setError(signUpError.message);
+      setLoading(false);
+      return;
+    }
+
+    // Step 2: If we have an active session, call the RPC to create college + profile
+    if (signUpData.session) {
+      const { error: rpcError } = await supabase.rpc('register_new_college', {
+        p_college_name: form.collegeName,
+        p_address: form.address,
+        p_full_name: form.principalName,
+        p_email: form.principalEmail,
+      });
+
+      if (rpcError) {
+        setError(rpcError.message);
+        setLoading(false);
+        return;
+      }
+
+      toast.success('College registered! Redirecting to dashboard...');
+      router.push('/');
+    } else {
+      // Email confirmation required — show success screen
+      setSubmitted(true);
+    }
+
     setLoading(false);
   };
 
@@ -36,14 +84,14 @@ export default function RegisterCollegePage() {
             Registration Submitted!
           </h1>
           <p className="text-sm text-[var(--text-secondary)]">
-            We&apos;ve received your college registration. Check your email for login instructions and your 14-day free trial activation.
+            We&apos;ve sent a confirmation email to <strong>{form.principalEmail}</strong>. Check your inbox to activate your account and start your 14-day free trial.
           </p>
           <div className="comic-card p-4 text-left">
             <p className="text-[0.65rem] font-bold uppercase tracking-wider text-[var(--text-muted)] mb-2">What&apos;s Next</p>
             <ul className="space-y-2">
               {[
-                'Check your email for the admin invite',
-                'Set your password and login',
+                'Confirm your email address',
+                'Log in with your credentials',
                 'Configure branches, divisions, and semesters',
                 'Invite staff and enroll students',
               ].map((step, i) => (
@@ -99,6 +147,11 @@ export default function RegisterCollegePage() {
           </div>
         </div>
 
+        {/* Error */}
+        {error && (
+          <div className="p-3 rounded-[12px] bg-red-50 border-2 border-red-200 text-red-700 text-[0.75rem] font-bold">{error}</div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <ComicInput
             label="College Name"
@@ -131,6 +184,15 @@ export default function RegisterCollegePage() {
             placeholder="principal@college.edu"
             value={form.principalEmail}
             onChange={(e) => setForm({ ...form, principalEmail: e.target.value })}
+            required
+          />
+          <ComicInput
+            label="Set Password"
+            icon="lock"
+            type="password"
+            placeholder="Min 8 characters"
+            value={form.principalPassword}
+            onChange={(e) => setForm({ ...form, principalPassword: e.target.value })}
             required
           />
           <ComicInput
